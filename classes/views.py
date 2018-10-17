@@ -25,7 +25,9 @@ def classroom_create(request):
 	if request.method == "POST":
 		form = ClassroomForm(request.POST, request.FILES or None)
 		if form.is_valid():
-			form.save()
+			classroom = form.save(commit=False)
+			classroom.teacher = request.user
+			classroom.save()
 			messages.success(request, "Successfully Created!")
 			return redirect('classroom-list')
 		print (form.errors)
@@ -41,7 +43,9 @@ def classroom_update(request, classroom_id):
 	if request.method == "POST":
 		form = ClassroomForm(request.POST, request.FILES or None, instance=classroom)
 		if form.is_valid():
-			form.save()
+			classroom = form.save(commit=False)
+			classroom.teacher = request.user
+			classroom.save()
 			messages.success(request, "Successfully Edited!")
 			return redirect('classroom-list')
 		print (form.errors)
